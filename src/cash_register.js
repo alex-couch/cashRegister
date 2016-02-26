@@ -1,35 +1,69 @@
-const cashRegister = {
+'use strict'
+
+const registerList = [];
+const firstRegister = {
 	items: []
 };
 
-function addItem(register, name, cost){
+const secondRegister = {
+	items: []
+};
+
+const addItem = (register, name, cost) => {
 	const item = {
 		name: name,
 		cost: cost
 	};
 
 	register.items.push(item);
+	console.log("Item: " + item.name + " | Cost: " + item.cost);
 }
 
-/*{
-	items:[
-		{
-			name: 'shoes', cost: 50		
-		},
-		{
-			name: 'shirt', cost: 15
-		}
-	]
-}*/
+const removeItem = (register, itemName) => {
+	without(register.items, 'name', itemName);
+	console.log("Item: " + itemName);
+}
 
 function getTotal(register){
-	return register.items.reduce((prev, curr) => prev.cost + curr.cost);
+	return register.items.reduce((prev, curr) => {
+		return prev + curr.cost;
+	}, 0);
 }
 
-addItem(cashRegister, 'shoes', 50);
-addItem(cashRegister, 'shirt', 15);
+function without(arr, key, val){
+	return arr.filter(item => item[key] !== val);
+}
 
-const total = getTotal(cashRegister);
-console.log('Total is: ', total);
+const trackRegister = (register, list, name) => {
+	list.push(register);
+	console.log(name);
+}
+const getTotalAll = (list) => {
+	return list.reduce((prev, curr) => {
+		return prev + getTotal(curr)
+	}, 0);
+}
 
-console.log(cashRegister);
+addItem(firstRegister, 'shoes', 50);
+addItem(firstRegister, 'shirt', 15);
+addItem(secondRegister, 'pants', 15);
+addItem(secondRegister, 'gum', 5);
+
+console.log('----------------------------');
+
+console.log('Total Register 1:', getTotal(firstRegister));
+console.log('Total Register 2:', getTotal(secondRegister));
+console.log('-----------------------------');
+
+removeItem(firstRegister, 'shoes');
+removeItem(secondRegister, 'gum');
+console.log('-----------------------------');
+
+console.log("Tracked Registers: ");
+trackRegister(firstRegister, registerList, "First Register");
+trackRegister(secondRegister, registerList, "Second Register");
+
+console.log('------------------------------');
+
+const totalAll = getTotalAll(registerList);
+console.log('Total All: ', totalAll);
